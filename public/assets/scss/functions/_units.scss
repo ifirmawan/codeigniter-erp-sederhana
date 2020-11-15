@@ -1,0 +1,7 @@
+/// Strip units from passed value
+/// @access public
+/// @group units
+/// @return {number}
+@function strip-unit($n) {
+  @return $n / ($n*0+1);
+}

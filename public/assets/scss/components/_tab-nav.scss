@@ -1,0 +1,67 @@
+/// Global namespace for tab nav component
+/// @access public
+/// @group tab nav
+/// @type string
+$DBtab-nav-namespace: "c-tab-nav" !default;
+
+// Tab navigation
+// @example html
+//  <nav>
+//    <ul class="c-tab-nav">
+//      <li class="c-tab-nav__tab"><a href="#photos">Photos</a></li>
+//      <!-- Add the --is-active modifier to active tabs -->
+//      <li class="c-tab-nav__tab c-tab-nav__tav--is-active"><a
+//      href="#docs">Documents</a></li>
+//    </ul>
+//  </nav>
+.#{$DBtab-nav-namespace} {
+    margin-left: 0;
+    padding-left: 0;
+
+    list-style: none;
+
+    border-bottom: 1px solid color(gray, dark, 0.1);
+}
+
+.#{$DBtab-nav-namespace}__tab {
+    display: inline-block;
+    margin-bottom: -1px;
+
+    color: color(gray, medium);
+
+    // Adjacent siblings get a margin-left
+    + #{&} {
+        margin-left: 16px;
+    }
+
+    a, button {
+        display: inline-block;
+        padding: 0;
+        padding-bottom: 8px;
+
+        border: 0;
+        border-bottom: 1px solid transparent;
+        transition: 0.2s;
+        background-color: transparent;
+        color: inherit;
+
+        appearance: none;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            text-decoration: none;
+
+            outline: 0;
+            color: color(gray, dark);
+            border-bottom-color: currentColor;
+        }
+    }
+
+    &.is-active a,
+    &.is-active button {
+        font-weight: 600;
+
+        color: color(gray, dark);
+        border-bottom-color: currentColor;
+    }
+}

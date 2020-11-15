@@ -1,0 +1,199 @@
+/// Global namespace for avatar component
+/// @access public
+/// @group avatar
+/// @type string
+$DBavatar-namespace: "c-avatar" !default;
+
+/// Global namespace for facepile component
+/// @access public
+/// @group avatar
+/// @type string
+$DBavatar-container-namespace: "c-facepile" !default;
+
+/// Color for avatar component. Ideally, colors are set by JS, but this provides a fallback
+/// @access public
+/// @group avatar
+/// @type color
+$DBavatar-color: color(blue) !default;
+
+/// Map for the various sizes of avatars for generated classes.
+/// @access public
+/// @group avatar
+/// @type map
+$DBavatar-sizes: (
+    xs: 16px,
+    s: 24px,
+    m: 32px,
+    l: 48px,
+    xl: 64px
+) !default;
+
+/// Set proportional font size, weight, and line-height for avatars without photos
+/// @access private
+/// @group avatar
+/// @param {number} size [32px] - Avatar size
+@mixin __avatarSize($s: 32px) {
+    width: $s;
+    // min-width provides a fallback for flexible-width elements like c-avatar--meta
+    min-width: $s;
+    height: $s;
+
+    font-size: round($s * 0.4);
+
+    @if($s < 32px) {
+        font-weight: 700;
+    } @else if($s >= 48px) {
+        font-weight: 400;
+    } @else {
+        font-weight: 600;
+    }
+}
+
+// Avatar component. A wrapper element with an (optional) image or the user's initials.
+.#{$DBavatar-namespace} {
+    // Default size for avatars without explicit sizing
+    @include __avatarSize(32px);
+
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+
+    text-align: center;
+    line-height: 2.5;
+
+    border-radius: 1000px;
+
+    &__img,
+    > img {
+        display: block;
+        min-width: 100%;
+        height: 100%;
+        // Keep proportions in tact even if the container is the wrong size
+        object-fit: cover;
+    }
+
+    // Give avatars a subtle little border
+    &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        border-radius: 1000px;
+        box-shadow: inset 0 0 0 1px color(gray, x-dark, 0.1);
+
+        pointer-events: none;
+    }
+
+    &#{&}--no-img {
+        // Default color for avatars without images
+        color: color(white);
+        background-color: $DBavatar-color;
+
+        &:after {
+            content: attr(data-initials);
+
+            box-shadow: none;
+        }
+
+        &.#{$DBavatar-namespace}--xs:after {
+            content: "";
+        }
+    }
+
+    &#{&}--square {
+        text-transform: uppercase;
+
+        border-radius: 3px;
+
+        &:after {
+            // Prevent the shadow pseudo-element from rendering
+            content: none;
+        }
+    }
+
+    &#{&}--meta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+
+        width: auto;
+        padding: 0 2px;
+
+        color: color(gray, medium);
+        background-color: color(gray, light, 0.7);
+
+        > img {
+            display: inline-block;
+            vertical-align: middle;
+            width: auto;
+            height: auto;
+            object-fit: none;
+            margin: 0 auto;
+        }
+
+        > span {
+            // Safari has some trouble properly aligning elements in the avatar
+            // without explicit margins or widths
+            margin: auto;
+        }
+
+        &:after {
+            // Prevent the shadow pseudo-element from rendering
+            content: none;
+        }
+    }
+
+    // Loop through all the avatar sizes to generate selectors
+    @each $key, $size in $DBavatar-sizes {
+        // This is output to `.#{DBavatar-ns}--size`
+        &--#{$key} {
+            @include __avatarSize($size);
+
+            @if $key == "xs" {
+                // Extra small avatars get no initials
+                &:after {
+                    content: "";
+                }
+            }
+        }
+    } // end @each
+} // end .avatar
+
+.#{$DBavatar-container-namespace} {
+    display: flex;
+    align-items: center;
+
+    > * {
+        margin-right: quarter($DBbaseline);
+    }
+
+    &.is-animated .#{$DBavatar-namespace} {
+        animation: DBavatar-animation .3s;
+        animation-timing-function: cubic-bezier(.57,.23,.39,1.6);
+        animation-fill-mode: both;
+
+        @for $i from 1 through 15 {
+            &:nth-child(#{$i}) {
+                animation-delay: #{$i*.025}s;
+            }
+        }
+    }
+}
+
+@keyframes DBavatar-animation {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

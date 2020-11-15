@@ -1,0 +1,15 @@
+/// The [micro clearfix](http://cssmojo.com/latest_new_clearfix_so_far/): Use @extend to avoid having the .clearfix class appear over and over again in markup
+/// @access public
+/// @group helpers
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.clearfix,
+%clearfix {
+    @include clearfix;
+}

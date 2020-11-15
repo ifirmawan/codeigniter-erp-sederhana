@@ -1,0 +1,133 @@
+
+/// Global namespace for form component
+/// @access public
+/// @group form
+/// @type string
+$DBform-namespace: "c-form" !default;
+
+/// Global namespace for label component
+/// @access public
+/// @group form
+/// @type string
+$DBlabel-namespace: "c-label" !default;
+
+/// Global namespace for input component
+/// @access public
+/// @group form
+/// @type string
+$DBinput-namespace: "c-input" !default;
+
+/// Text color for label component
+/// @access public
+/// @group form
+/// @type color
+$DBlabel-color: color(gray, medium) !default;
+
+/// Text color for input component
+/// @access public
+/// @group form
+/// @type color
+$DBinput-color: color(gray) !default;
+
+/// Disabled text color for input component
+/// @access public
+/// @group form
+/// @type color
+$DBinput-color-disabled: color(gray, 0.7) !default;
+
+/// Border color for input component
+/// @access public
+/// @group form
+/// @type color
+$DBinput-border: color(gray, x-dark, 0.1) !default;
+
+/// Focus border color for input component
+/// @access public
+/// @group form
+/// @type color
+$DBinput-border-focused: color(blue, medium) !default;
+
+/// Background color for input component
+/// @access public
+/// @group form
+/// @type color
+$DBinput-background: color(white) !default;
+
+/// Disabled background color for input component
+/// @access public
+/// @group form
+/// @type color
+$DBinput-background-disabled: color(gray, x-light) !default;
+
+// Label component
+.#{$DBlabel-namespace} {
+    // Ensure the element is actually a label
+    @include assert-selector(label);
+
+    display: block;
+    margin-bottom: $DBbaseline;
+
+    font-size: 12px;
+
+    color: $DBlabel-color;
+}
+
+// Input component
+.#{$DBinput-namespace} {
+    // Ensure the element is actually a kind of input
+    @include assert-selector(input, button, select, textarea);
+
+    display: block;
+    width: 100%;
+    padding: 5px 7px;
+    box-sizing: border-box;
+
+    font-size: $DBfont-size;
+    text-align: left;
+
+    color: $DBinput-color;
+    border: 1px solid $DBinput-border;
+    border-radius: 3px;
+    background-color: $DBinput-background;
+    background-clip: padding-box;
+
+    &:focus {
+        border-color: $DBinput-border-focused;
+        outline: 0;
+    }
+
+    &:disabled, &.is-disabled {
+        background-color: $DBinput-background-disabled;
+    }
+
+    &.is-invalid,
+    .#{$DBform-namespace}--validated &:invalid {
+        @include background-image("icon-form-invalid.svg", 14px, right 10px center);
+
+        padding-right: 34px;
+
+        border-color: color(red, 0.5);
+        // Override default invalidation styles
+        box-shadow: none;
+        outline: 0;
+    }
+
+    &.is-valid,
+    .#{$DBform-namespace}--validated &:valid {
+        @include background-image("icon-form-valid.svg", 14px, right 10px center);
+
+        padding-right: 34px;
+    }
+}
+
+// Textarea component
+textarea.#{$DBinput-namespace} {
+    resize: vertical;
+}
+
+// Select component
+select.#{$DBinput-namespace} {
+    @include background-image("icon-form-dropdown.svg", 7px 14px, right 10px center);
+
+    padding-right: 27px;
+}

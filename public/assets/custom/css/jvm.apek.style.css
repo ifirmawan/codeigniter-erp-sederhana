@@ -1,0 +1,12 @@
+.slip-label {
+    color: #333;
+    margin-top: -6px;
+    text-align: left;
+    clear: both;
+    float:left;
+    margin-right:15px;
+}
+.slip-input {
+    margin-top: -6px;
+    float: right;
+}

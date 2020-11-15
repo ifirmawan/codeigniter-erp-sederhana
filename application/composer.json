@@ -1,0 +1,21 @@
+{
+    "name": "jvm/internal",
+    "description": "internal app java multi mandiri",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "iwan firmawan",
+            "email": "iwan.firmawan@jagokomputer.com"
+        }
+    ],
+    "require": {
+        "dompdf/dompdf": "^0.8.0",
+        "phpmailer/phpmailer": "^5.2",
+        "phpoffice/phpspreadsheet": "dev-develop",
+        "robmorgan/phinx": "^0.9.1"
+    },
+    "config": {
+        "vendor-dir": "third_party"
+    }
+}

@@ -1,0 +1,90 @@
+/// Defining acceptable alpha values for color functions
+/// @access public
+/// @group colors
+/// @type list
+$__alpha-stops: (0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1);
+
+/// Defining acceptable shade values for color functions
+/// @access public
+/// @group colors
+/// @type list
+$__shade-vals: ("x-dark", "dark", "base", "medium", "light", "x-light");
+
+/// The grayscale function takes two arguments:
+/// @example scss
+///  grayscale(1, 1);
+///  This will create a dark gray that is fully opaque.
+/// @access public
+/// @group colors
+/// @require gradation
+/// @param {number} gradation - There are 10 levels of gray, ranging from 1 to 10 (darkest to lightest).
+/// @param {number} alpha - There are 11 levels of opacity, ranging from 0.0 to 1.0 (transparent to opaque).
+@function grayscale($gradation, $alpha: 1) {
+    @if map-has-key($DBgrayscaleColors, $gradation) {
+        $alpha-val: $alpha;
+
+        @if index($__alpha-stops, $alpha-val) == null {
+            @error "Only alpha values in 0.1 increments are allowed";
+        }
+
+        $grayscale-val: map-get($DBgrayscaleColors, $gradation);
+        @return rgba($grayscale-val, $alpha-val);
+    } @else {
+        @warn "No gradation of #{$gradation} found in $DBgrayscaleColors map.";
+    }
+}
+
+/// Color helper used a color by it's name, select a shade and modify opacity
+/// @example scss - This will create a base blue that is fully opaque.
+///  color(blue);
+/// @example scss - This will create a dark red that is 80% opaque.
+///  color(red, dark, 0.8);
+/// @example scss - This will create a base yellow that is 60% opaque.
+///  color(yellow, 0.6);
+/// @access public
+/// @group colors
+/// @require name
+/// @param {string} name - Color named defined in `$DBglobalColors`. There are 7 colors (gray, blue, green, red, yellow, black, white).
+/// @param {string | number} properties... -  Each color has 6 shades (x-dark, dark, base, medium, light, x-light). Each shade has 11 levels of opacity, ranging from 0.0 to 1.0 (transparent to opaque).
+@function color($name, $properties...) {
+    $n: length($properties);
+    $i: 1;
+
+    $shade-val: "base";
+    $alpha-val: 1;
+
+    @while $i <= $n {
+        $current-property: (nth($properties, $i));
+
+        @if type-of($current-property) == "string" {
+            $shade-val: $current-property;
+        } @else if type-of($current-property) == "number" {
+            $alpha-val: $current-property;
+        }
+
+        $i: $i + 1;
+    }
+
+    @if index($__shade-vals, $shade-val) == null {
+        @warn "Only the following shades are allowed: " + $__shade-vals;
+    }
+
+    @if index($__alpha-stops, $alpha-val) == null {
+        @error "Only alpha values in 0.1 increments are allowed";
+    }
+
+    @if map-has-key($DBglobalColors, $name) {
+        $rgb-val: ();
+
+        @if $name == white or $name == black {
+            $rgb-val: map-get($DBglobalColors, $name);
+        } @else {
+            $rgb-val: map-get(map-get($DBglobalColors, $name), $shade-val);
+        }
+
+        @return rgba($rgb-val, $alpha-val);
+    } @else {
+        @warn "No global color called #{$name} found."
+        + "Are you sure it's in `variables/colors?`";
+    }
+}

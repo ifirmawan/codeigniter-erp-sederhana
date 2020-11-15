@@ -1,0 +1,227 @@
+/// Global namespace for button component
+/// @access public
+/// @group button
+/// @type string
+$DBbutton-namespace: "c-btn" !default;
+
+/// Background color for primary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-primary: linear-gradient(color(blue), color(blue, dark)) !default;
+
+/// Hover background color for primary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-primary-hover: color(blue) !default;
+
+/// Active background color for primary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-primary-active: color(blue, dark) !default;
+
+/// Background color for secondary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-secondary: color(white) !default;
+
+/// Hover background color for secondary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-secondary-hover: linear-gradient(color(white), color(gray, x-light)) !default;
+
+/// Active background color for secondary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-secondary-active: color(gray, x-light) !default;
+
+/// Background color for tertiary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-tertiary: linear-gradient(color(white), color(blue, x-light)) !default;
+
+/// Hover background color for tertiary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-tertiary-hover: color(blue, x-light) !default;
+
+/// Active background color for tertiary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-tertiary-active: linear-gradient(color(blue, x-light), lighten(color(blue, light), 5%)) !default;
+
+
+/// Fallback background color (IE <= 9) for primary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-fallback-primary: color(blue);
+
+/// Fallback background color (IE <= 9) for tertiary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-background-fallback-tertiary: color(white);
+
+/// Text background color for primary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-text-primary: color(white) !default;
+
+/// Text background color for secondary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-text-secondary: color(gray) !default;
+
+/// Text background color for tertiary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-text-tertiary: color(blue) !default;
+
+/// Border color for primary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-border-primary: color(blue, dark) !default;
+
+/// Border color for secondary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-border-secondary: color(gray, light) !default;
+
+/// Border color for tertiary button
+/// @access public
+/// @group button
+/// @type color
+$DBbutton-border-tertiary: color(blue) !default;
+
+// Button component
+// @todo Absract out button mixin to be more DRY
+.#{$DBbutton-namespace} {
+    // Ensure the element is actually a button
+    @include assert-selector(button, "[type=submit]");
+
+    display: inline-block;
+    padding: 7px 12px;
+
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+
+    border: 1px solid currentColor;
+    border-radius: 3px;
+
+    cursor: pointer;
+
+    &[disabled], &#{&}--disabled {
+        opacity: 0.5;
+
+        cursor: default;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 2px color(blue, 0.3);
+        outline: none;
+    }
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    &#{&}--big {
+        padding: 10px 26px;
+    }
+
+    &#{&}--full {
+        display: block;
+        width: 100%;
+    }
+
+    &#{&}--primary {
+        color: $DBbutton-text-primary;
+        border-color: $DBbutton-border-primary;
+        background-color: $DBbutton-background-fallback-primary;
+        background: $DBbutton-background-primary;
+
+        &:hover:not(:disabled) {
+            background: $DBbutton-background-primary-hover;
+        }
+
+        &:active:not(:disabled) {
+            background:$DBbutton-background-primary-active;
+        }
+    }
+
+    &#{&}--secondary {
+        color: $DBbutton-text-secondary;
+        border-color: $DBbutton-border-secondary;
+        background: $DBbutton-background-secondary;
+
+        &:hover:not(:disabled) {
+            background: $DBbutton-background-secondary-hover;
+        }
+
+        &:active:not(:disabled) {
+            background:$DBbutton-background-secondary-active;
+        }
+    }
+
+    &#{&}--tertiary {
+        color: $DBbutton-text-tertiary;
+        border-color: $DBbutton-border-tertiary;
+        background-color: $DBbutton-background-fallback-tertiary;
+        background: $DBbutton-background-tertiary;
+
+        &:hover:not(:disabled) {
+            background: $DBbutton-background-tertiary-hover;
+        }
+
+        &:active:not(:disabled) {
+            background:$DBbutton-background-tertiary-active;
+        }
+    }
+}
+
+.#{$DBbutton-namespace}-group {
+    display: flex;
+
+    .#{$DBbutton-namespace} {
+        margin: 0;
+        border-radius: 0;
+
+        + .#{$DBbutton-namespace} {
+            border-left: 0;
+        }
+
+        &:first-child {
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        &:last-child {
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+    }
+
+    &--justify {
+        width: 100%;
+
+        .#{$DBbutton-namespace} {
+            flex: 1 0 auto;
+        }
+    }
+}

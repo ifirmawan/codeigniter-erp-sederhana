@@ -1,0 +1,85 @@
+/// Style base elements, but allows them to be scooped
+@mixin scoped-type() {
+    hr {
+        @extend %hr;
+    }
+
+    a {
+        @extend %f-a;
+    }
+}
+
+// Headings
+.f-headline, .f-subhead,
+.f1, .f2, .f3, .f4 {
+    display: block;
+    margin-bottom: $DBbaseline;
+
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+.f-headline {
+    font-size: 48px;
+    font-weight: 200;
+}
+
+.f-subhead {
+    font-size: 36px;
+    font-weight: 200;
+}
+
+.f1 {
+    font-size: 24px;
+}
+
+.f2 {
+    font-size: 20px;
+}
+
+.f3 {
+    font-size: 16px;
+}
+
+.f4 {
+    margin-bottom: 0;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: $DBbaseline;
+}
+
+// Links
+%f-a,
+.f-a,
+.f-link {
+    text-decoration: none;
+
+    color: color(blue);
+
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// TODO:dte
+// Deprecate the %hr element in favor of the c-rule component
+%hr {
+    margin-bottom: $DBbaseline;
+
+    border: 0;
+    border-top: 1px solid color(gray, x-dark, 0.1);
+}
+
+@if ($DBscope-scooter-reset == true) {
+    .scooter-css {
+
+        @include scoped-type;
+    }
+} @else {
+
+    @include scoped-type;
+}
+
